@@ -1,3 +1,5 @@
+#include "threadpool.h"
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -8,170 +10,194 @@
 #include <netdb.h>
 #include <errno.h>
 
-#define BUFFER_SIZE 4096
-#define FFMIN(a, b) (a < b) ? a : b
-#define MAX_URL_SIZE 4096
+#define THREAD 1
+#define QUEUE  4
 
-size_t av_strlcpy(char *dst, const char *src, size_t size)
+#include "urldecode.h"
+static FILE *gfp = NULL;
+static int URL_ACCESS_TIMES = 200;
+
+typedef struct thread_sys_t
 {
-    size_t len = 0;
-    while (++len < size && *src)
-        *dst++ = *src++;
-    if (len <= size)
-        *dst = 0;
-    return len + strlen(src) - 1;
+  FILE *fp;
+  threadpool_t *pool
+} thread_sys_t;
+
+pthread_mutex_t lock;
+void thread_task(void *arg)
+{
+  fprintf(stdout, "thread_task run. %lu\n", pthread_self());
+  thread_sys_t *threadmgr = (thread_sys_t *)arg;
+  char read_line[1024];
+  int count = 0x7fffffff;
+
+  pthread_mutex_lock(&lock);
+  if ((fgets(read_line, 1000, threadmgr->fp) != NULL))
+  {
+    pthread_mutex_unlock(&lock);
+
+    fprintf(stdout, "read line read_line=%s\n", read_line);
+    sscanf(read_line,"\"%s\t%d", read_line, &count);
+
+    if (count >= URL_ACCESS_TIMES)
+    {
+      char *url_decode = urlDecode(read_line);
+      char *tmp = strstr(url_decode, "\"");
+      if (tmp != NULL)
+      {
+        *tmp = 0;
+      }
+      fprintf(stdout, "read line url_decode=%s count=%d\n", url_decode, count);
+
+      if (strstr(url_decode, "http://") != NULL)
+      {
+        http_task(url_decode, gfp);
+      }
+
+      free(url_decode);
+
+      pthread_mutex_lock(&lock);
+      int tasks = 0;
+      while (threadpool_add(threadmgr->pool, &thread_task, threadmgr, 0) == 0)
+      {
+          tasks++;
+      }
+
+      fprintf(stderr, "Added thread %d tasks.\n", tasks);
+
+      pthread_mutex_unlock(&lock);
+    }
+  }
+  else
+  {
+    //perror("fgets read fail.");
+    fprintf(stderr, "fgets read fail.%s\n", strerror(errno));
+  }
+
+  fprintf(stdout, "thread_task out. %lu\n", pthread_self());
 }
 
-void av_url_split(char *proto, int proto_size,
-                  char *authorization, int authorization_size,
-                  char *hostname, int hostname_size,
-                  int *port_ptr,
-                  char *path, int path_size,
-                  const char *url)
+
+void thread_pool_task(FILE *fp)
 {
-    const char *p, *ls, *ls2, *at, *at2, *col, *brk;
+  fprintf(stdout, "thread pool\n");
 
-    if (port_ptr)               *port_ptr = -1;
-    if (proto_size > 0)         proto[0] = 0;
-    if (authorization_size > 0) authorization[0] = 0;
-    if (hostname_size > 0)      hostname[0] = 0;
-    if (path_size > 0)          path[0] = 0;
+  pthread_mutex_init(&lock, NULL);
 
-    /* parse protocol */
-    if ((p = strchr(url, ':'))) {
-        av_strlcpy(proto, url, FFMIN(proto_size, p + 1 - url));
-        p++; /* skip ':' */
-        if (*p == '/') p++;
-        if (*p == '/') p++;
-    } else {
-        /* no protocol means plain filename */
-        av_strlcpy(path, url, path_size);
-        return;
+  thread_sys_t *threadmgr = malloc(sizeof(thread_sys_t));
+  threadpool_t *pool;
+
+  assert((pool = threadpool_create(THREAD, QUEUE, 0)) != NULL);
+
+  threadmgr->fp = fp;
+  threadmgr->pool = pool;
+  fprintf(stdout, "Pool started with %d threads and " "queue size of %d\n", THREAD, QUEUE);
+
+  //char *url = "http://record.vod.huanjuyun.com/xcrs/15013x03_1330846705_1554444831_1467210406_1467210388.m3u8";
+  //threadpool_add(pool, &task, url, 0);
+
+  int tasks = 0;
+  while (threadpool_add(pool, &thread_task, threadmgr, 0) == 0)
+  {
+      tasks++;
+  }
+
+  fprintf(stderr, "Added thread %d tasks\n", tasks);
+
+  int status = threadpool_destroy(pool, 1);
+
+  free(threadmgr);
+
+  fprintf(stdout, "destroy threadpool status=%d\n", status);
+}
+
+void test_readfile()
+{
+  FILE *fp = NULL;
+  fp = fopen("/mnt/hgfs/E/download/mp4_output.txt", "r");
+  if (fp != NULL)
+  {
+    char str[1024];
+    int c = 0;
+    while (fgets(str, 1024, fp) != NULL && c < 10)
+    {
+      fprintf(stdout, "read line str=%s\n", str);
+      int count = 0;
+      sscanf(str, "\"%s\t%d", str, &count);
+      fprintf(stdout, "str=%s count=%d\n", str, count);
+
+      c++;
     }
+  }
+}
 
-    /* separate path from hostname */
-    ls = strchr(p, '/');
-    ls2 = strchr(p, '?');
-    if(!ls)
-        ls = ls2;
-    else if (ls && ls2)
-        ls = FFMIN(ls, ls2);
-    if(ls)
-        av_strlcpy(path, ls, path_size);
+void test_sscanf()
+{
+  const char *str = "Content-Length: 68430";
+  int len = 0;
+  sscanf(str, "%*s%d", &len);
+
+  fprintf(stdout, "%d\n", len);
+}
+
+#define PARSE_TAG "mp4" //"m3u8"
+
+void parse_urls(const char *parsetag)
+{
+  //
+  FILE *fp;
+  char file_name[1024];
+  if (strstr(parsetag, "m3u8") != NULL)
+  {
+    if (gfp == NULL)
+    {
+        gfp = fopen("output_m3u8.txt", "a");
+    }
+    fp = fopen("/mnt/hgfs/E/download/outfile2.txt", "r");
+    if (fp != NULL)
+    {
+      thread_pool_task(fp);
+      fclose(fp);
+    }
     else
-        ls = &p[strlen(p)]; // XXX
-
-    /* the rest is hostname, use that to parse auth/port */
-    if (ls != p) {
-        /* authorization (user[:pass]@hostname) */
-        at2 = p;
-        while ((at = strchr(p, '@')) && at < ls) {
-            av_strlcpy(authorization, at2,
-                       FFMIN(authorization_size, at + 1 - at2));
-            p = at + 1; /* skip '@' */
-        }
-
-        if (*p == '[' && (brk = strchr(p, ']')) && brk < ls) {
-            /* [host]:port */
-            av_strlcpy(hostname, p + 1,
-                       FFMIN(hostname_size, brk - p));
-            if (brk[1] == ':' && port_ptr)
-                *port_ptr = atoi(brk + 2);
-        } else if ((col = strchr(p, ':')) && col < ls) {
-            av_strlcpy(hostname, p,
-                       FFMIN(col + 1 - p, hostname_size));
-            if (port_ptr) *port_ptr = atoi(col + 1);
-        } else
-            av_strlcpy(hostname, p,
-                       FFMIN(ls + 1 - p, hostname_size));
+    {
+      perror("open file fail.");
     }
+    
+  }
+  else if (strstr(parsetag, "mp4") != NULL)
+  {
+    if (gfp == NULL)
+    {
+        gfp = fopen("output_mp4.txt", "a");
+    }
+    int i = 0;
+    int index = 16;
+    for (i = 1; i <= index; ++i)
+    {
+      sprintf(file_name, "/mnt/hgfs/E/download/split_csv_file/mp4_urls_%d_outfile.txt", i);
+      fprintf(stdout, "open file %s\n", file_name);
+      fp = fopen(file_name, "r");
+      if (fp != NULL)
+      {
+        thread_pool_task(fp);
+        fclose(fp);
+      }
+      else
+      {
+        perror("open file fail2.");
+      }
+    }
+  }
+
+  if (gfp != NULL)
+  {
+    fclose(gfp);
+  }
 }
 
 int main(int argc, char const *argv[])
 {
-  //assert(argc >= 2);
-
-  char hostname[1024], hoststr[1024], proto[10];
-  char auth[1024], proxyauth[1024] = "";
-  char path[MAX_URL_SIZE];
-  char buf[1024], urlbuf[MAX_URL_SIZE];
-  int port, use_proxy, err, location_changed = 0, redirects = 0, attempts = 0;
-
-  const char *url = "http://record.vod.huanjuyun.com/xcrs/15013x03_1330846705_1554444831_1467210406_1467210388.m3u8";
-  av_url_split(proto, sizeof(proto),
-                auth, sizeof(auth),
-                hostname, sizeof(hostname),
-                &port,
-                path, sizeof(path),
-                url);
-
-  fprintf(stdout, "parse url:proto=%s \nauth=%s \nhostname=%s \nport=%d \npath=%s\n",
-   proto, auth, hostname, port, path);
-
-  if (port < 0)
-  {
-    port = 80;
-  }
-  int sock_fd = socket(AF_INET, SOCK_STREAM, 0);
-  assert( sock_fd >= 0 );
-
-  struct hostent* hostinfo = gethostbyname(hostname);
-  assert(hostinfo);
-  //char *ip;
-  struct sockaddr_in server;
-  bzero( &server, sizeof( server ) );
-  server.sin_family = AF_INET;
-  server.sin_addr = *((struct in_addr*)*(hostinfo->h_addr_list));
-  //inet_pton( AF_INET, ip, &server.sin_addr );
-  server.sin_port = htons( port );
-
-  int connfd = connect(sock_fd, (struct sockaddr*)&server,  sizeof(server));
-  assert(connfd != -1);
-  // int ret = bind( sock_fd, ( struct sockaddr* )&server, sizeof( server ) );
-  // assert(ret != 0);
-
-  char buffer[ BUFFER_SIZE ];
-  memset( buffer, '\0', BUFFER_SIZE );
-  int data_read = 0;
-  int read_index = 0;
-  int checked_index = 0;
-  int start_line = 0;
-  //CHECK_STATE checkstate = CHECK_STATE_REQUESTLINE;
-  while( 1 )
-  {
-      data_read = recv( connfd, buffer + read_index, BUFFER_SIZE - read_index, 0 );
-      fprintf(stdout, "recv %d\n", data_read);
-      if ( data_read == -1 )
-      {
-          printf( "reading failed %s\n" , strerror(errno));
-          break;
-      }
-      else if ( data_read == 0 )
-      {
-          printf( "remote client has closed the connection\n" );
-          break;
-      }
-
-
-      // read_index += data_read;
-      // HTTP_CODE result = parse_content( buffer, checked_index, checkstate, read_index, start_line );
-      // if( result == NO_REQUEST )
-      // {
-      //     continue;
-      // }
-      // else if( result == GET_REQUEST )
-      // {
-      //     send( connfd, szret[0], strlen( szret[0] ), 0 );
-      //     break;
-      // }
-      // else
-      // {
-      //     send( connfd, szret[1], strlen( szret[1] ), 0 );
-      //     break;
-      // }
-  }
-  close( connfd );
-  close(sock_fd);
-
+  parse_urls(PARSE_TAG);
   return 0;
 }
