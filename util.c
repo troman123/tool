@@ -19,6 +19,7 @@ ssize_t writen(int fd, void *usrbuf, size_t n)
 
     while (nleft > 0) {
         if ((nwritten = write(fd, bufp, nleft)) <= 0) {
+            fprintf(stderr, "write nwritten=%ld nleft=%lu\n", nwritten, nleft);
             if (errno == EINTR)
                 nwritten = 0;
             else
@@ -39,6 +40,7 @@ ssize_t readn(int fd, void *usrbuf, size_t n)
 
     while (nleft > 0) {
         if ((nread = read(fd, bufp, nleft)) < 0) {
+            fprintf(stderr, "read nread=%ld nleft=%lu\n", nread, nleft);
             if (errno == EINTR)
                 nread = 0;
             else
@@ -163,7 +165,12 @@ void printHostIp(const struct hostent * host)
 int tcp_connect(const char *host, int port)
 {
     int sock_fd = socket(PF_INET, SOCK_STREAM, 0);
-    assert( sock_fd != -1 );
+    //assert( sock_fd != -1 );
+    if (sock_fd == -1)
+    {
+      fprintf(stderr, "socket fail. %s\n", strerror(errno));
+      return -1;
+    }
 
     struct hostent* hostinfo = gethostbyname(host);
     assert(hostinfo);
@@ -178,7 +185,12 @@ int tcp_connect(const char *host, int port)
     server.sin_port = htons( port );
 
     int ret = connect(sock_fd, (struct sockaddr*)&server,  sizeof(server));
-    assert(ret != -1);
+    //assert(ret != -1);
+    if (ret == -1)
+    {
+      fprintf(stderr, "connect fail. %s\n", strerror(errno));
+      return -1;
+    }
 
     fprintf(stdout, "tcp conn: host=%s port=%d sock_fd=%d ret=%d\n", host, port, sock_fd, ret);
 

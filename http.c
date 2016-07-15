@@ -1,8 +1,8 @@
 #include "http.h"
 /* Set the request named NAME to VALUE. */
-static char request_string[MAXURL + 4096];
-static char host[MAXURL];
-static char arg[MAXURL];
+// static char request_string[MAXURL + 4096];
+// static char host[MAXURL];
+// static char arg[MAXURL];
 
 static void response_free(struct resp_headers *resp)
 {
@@ -56,13 +56,14 @@ static struct request *request_new(const char *method, char *arg)
     req->hcount = 0;
     req->method = method;
     req->arg = arg;
+    //memcpy(req->arg, arg, strlen(arg));
     req->headers = calloc(req->hlimit, sizeof(struct request_header));
 
     return req;
 }
 
 /* parse url and save to global string buffer host & arg * */
-void parse_url(const char *url)
+void parse_url(const char *url, char *host, char *arg)
 {
     char *p;
 
@@ -84,8 +85,9 @@ void parse_url(const char *url)
     }
 }
 
-static size_t create_req_str(struct request *req)
+static size_t create_req_str(struct http_sys_t *p_http)
 {
+    struct request *req = p_http->req;
     struct request_header *hdr;
     char *p;
     size_t size = 0;
@@ -103,8 +105,8 @@ static size_t create_req_str(struct request *req)
     size += 2;   // "\r\n"
 
     // add 1 for '\0', otherwise valgrind show Invalid write of size 1
-    p = request_string;
-    memset(request_string, 0, sizeof(request_string));
+    p = p_http->request_string;
+    memset(p_http->request_string, 0, sizeof(p_http->request_string));
     strcat(p, req->method), strcat(p, " ");
     strcat(p, req->arg);
     strcat(p, " HTTP/1.1\r\n");
@@ -136,30 +138,34 @@ static void request_free (struct request *req)
 }
 
 /* open connect and send request, return a socket fd */
-struct request *request_send(char *method, const char *url)
+struct request *request_send(struct http_sys_t *p_http, char *method, const char *url)
 {
     struct request *req;
     size_t size;
 
     int sockfd;
-    parse_url(url);
+    //char arg[MAXURL];
+    //char host[MAXURL];
+    parse_url(url, p_http->host, p_http->arg);
 
-    if ((sockfd = tcp_connect(host, 80)) < 0) {
-        fprintf(stderr, "http_get: can not create connection to %s\n", host);
+    if ((sockfd = tcp_connect(p_http->host, 80)) < 0)
+    {
+        fprintf(stderr, "http_get: can not create connection to %s\n", p_http->host);
         return NULL;
     }
 
-    req = request_new(method, arg);
+    req = request_new(method, p_http->arg);
+    p_http->req = req;
     req->sockfd = sockfd;
-    request_set_header(req, "Host", host);
+    request_set_header(req, "Host", p_http->host);
     //request_set_header(req, "Accept-Encoding", "gzip");
     //request_set_header(req, "User-Agent", DEFAULT_USER_AGENT);
 
-    size = create_req_str(req);
-    //fprintf(stdout, "request_string=%s\n", request_string);
-    if (writen(sockfd, request_string, size) == -1)
+    size = create_req_str(p_http);
+    fprintf(stdout, "request_string=%s\n", p_http->request_string);
+    if (writen(sockfd, p_http->request_string, size) == -1)
     {
-        fprintf(stderr, "http_get: fail send request to %s\n", host);
+        fprintf(stderr, "http_get: fail send request to %s\n", p_http->host);
         request_free(req);
         return NULL;
     }
@@ -306,8 +312,10 @@ static char *response_head_strdup(struct resp_headers *resp, char *name)
     return value;
 }
 
-int parseHttpRespond(int fd, FILE *fp)
+int parseHttpRespond(struct http_sys_t *p_http, FILE *fp, int filetype, int count)
 {
+    struct request *req = p_http->req;
+    int fd = req->sockfd;
     int status;
     struct resp_headers *header;
     char *recv_buf = read_drain_headers(fd);
@@ -315,9 +323,10 @@ int parseHttpRespond(int fd, FILE *fp)
     //fprintf(stdout, "recv_buf=%s\n", recv_buf);
 
     header = calloc(1, sizeof(struct resp_headers));
+    p_http->resp = header;
     if ((status = parse_header(header, recv_buf)) == -1) {
         fprintf(stderr, "http_get %s%s: fail to parse response header\n",
-                host, arg);
+                p_http->host, p_http->arg);
         return -1;
     }
 
@@ -373,24 +382,35 @@ int parseHttpRespond(int fd, FILE *fp)
             sscanf(header->headers[i], "%*s%lu", &content_len);
         }
     }
-    int readSize = parseMp4Box(fd, &type);
+    if (filetype == FILE_TYPE_MP4)
+    {
+        int readSize = parseMp4Box(fd, &type);
 
-    fprintf(stdout, "parseMp4Box %lu %lu %d\n", content_len, (type == 0) ? readSize : (content_len - readSize), type);
-    fprintf(fp, "%lu\t%lu\t%d\n", content_len, (type == 0) ? readSize : content_len - readSize, type);
+        fprintf(stdout, "parseMp4Box %lu %lu %d %d\n", content_len, (type == 0) ? readSize : (content_len - readSize), type, count);
+        fprintf(fp, "%lu\t%lu\t%d\t%d\n", content_len, (type == 0) ? readSize : content_len - readSize, type, count);
+    }
+    else
+    {
+        fprintf(fp, "%lu\t%d\n", content_len, count);
+    }
 }
 
 
-void http_task(const char *url, FILE *output)
+void http_task(const char *url, FILE *output, int filetype, int count)
 {
-    struct request *req = request_send("GET", url);
+    struct http_sys_t *p_http = malloc(sizeof(http_sys_t));
+    struct request *req = request_send(p_http, "GET", url);
+    p_http->req = req;
     if (req != NULL)
     {
         //CHECK_STATE checkstate = CHECK_STATE_REQUESTLINE;
-        parseHttpRespond(req->sockfd, output);
+        parseHttpRespond(p_http, output, filetype, count);
 
         close(req->sockfd);
         request_free(req);
     }
+
+    free(p_http);
 }
 
 

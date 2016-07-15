@@ -1,4 +1,5 @@
 #include "threadpool.h"
+#include "util.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -15,10 +16,12 @@
 
 #include "urldecode.h"
 static FILE *gfp = NULL;
-static int URL_ACCESS_TIMES = 200;
+static int URL_ACCESS_TIMES = 100;
+static uint64_t access_sum = 0;
 
 typedef struct thread_sys_t
 {
+  int type;
   FILE *fp;
   threadpool_t *pool
 } thread_sys_t;
@@ -41,6 +44,7 @@ void thread_task(void *arg)
 
     if (count >= URL_ACCESS_TIMES)
     {
+      access_sum += count;
       char *url_decode = urlDecode(read_line);
       char *tmp = strstr(url_decode, "\"");
       if (tmp != NULL)
@@ -51,7 +55,7 @@ void thread_task(void *arg)
 
       if (strstr(url_decode, "http://") != NULL)
       {
-        http_task(url_decode, gfp);
+        http_task(url_decode, gfp, threadmgr->type, count);
       }
 
       free(url_decode);
@@ -78,7 +82,7 @@ void thread_task(void *arg)
 }
 
 
-void thread_pool_task(FILE *fp)
+void thread_pool_task(FILE *fp, int type)
 {
   fprintf(stdout, "thread pool\n");
 
@@ -91,6 +95,7 @@ void thread_pool_task(FILE *fp)
 
   threadmgr->fp = fp;
   threadmgr->pool = pool;
+  threadmgr->type = type;
   fprintf(stdout, "Pool started with %d threads and " "queue size of %d\n", THREAD, QUEUE);
 
   //char *url = "http://record.vod.huanjuyun.com/xcrs/15013x03_1330846705_1554444831_1467210406_1467210388.m3u8";
@@ -140,7 +145,7 @@ void test_sscanf()
   fprintf(stdout, "%d\n", len);
 }
 
-#define PARSE_TAG "mp4" //"m3u8"
+#define PARSE_TAG "mp4"//"mp4" //"m3u8"
 
 void parse_urls(const char *parsetag)
 {
@@ -149,6 +154,7 @@ void parse_urls(const char *parsetag)
   char file_name[1024];
   if (strstr(parsetag, "m3u8") != NULL)
   {
+    remove("output_m3u8.txt");
     if (gfp == NULL)
     {
         gfp = fopen("output_m3u8.txt", "a");
@@ -156,7 +162,7 @@ void parse_urls(const char *parsetag)
     fp = fopen("/mnt/hgfs/E/download/outfile2.txt", "r");
     if (fp != NULL)
     {
-      thread_pool_task(fp);
+      thread_pool_task(fp, FILE_TYPE_M3U8);
       fclose(fp);
     }
     else
@@ -167,20 +173,21 @@ void parse_urls(const char *parsetag)
   }
   else if (strstr(parsetag, "mp4") != NULL)
   {
+    remove("output_mp4.txt");
     if (gfp == NULL)
     {
         gfp = fopen("output_mp4.txt", "a");
     }
     int i = 0;
     int index = 16;
-    for (i = 1; i <= index; ++i)
+    for (i = 0; i <= index; ++i)
     {
       sprintf(file_name, "/mnt/hgfs/E/download/split_csv_file/mp4_urls_%d_outfile.txt", i);
       fprintf(stdout, "open file %s\n", file_name);
       fp = fopen(file_name, "r");
       if (fp != NULL)
       {
-        thread_pool_task(fp);
+        thread_pool_task(fp, FILE_TYPE_MP4);
         fclose(fp);
       }
       else
@@ -199,5 +206,7 @@ void parse_urls(const char *parsetag)
 int main(int argc, char const *argv[])
 {
   parse_urls(PARSE_TAG);
+
+  fprintf(stdout, "access_sum=%lld\n", access_sum);
   return 0;
 }

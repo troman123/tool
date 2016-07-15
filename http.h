@@ -1,4 +1,5 @@
 //#include "mp4parser.h"
+#include "util.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -24,6 +25,7 @@
 struct request {
     int sockfd;
     const char *method;
+
     char *arg;
     struct request_header {
         const char *name;
@@ -54,3 +56,14 @@ headers[0]          headers[1]                headers[2]         \0 */
     int hcount;
     int hlimit;
 };
+
+
+typedef struct http_sys_t
+{
+    char request_string[MAXURL + 4096];
+    char host[MAXURL];
+    char arg[MAXURL];
+
+    struct request *req;
+    struct resp_headers *resp;
+} http_sys_t;
