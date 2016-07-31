@@ -41,7 +41,7 @@ int audioDecoder(char *url)
     }
     else
     {
-      WARN("can't find any stream.");
+      //WARN("can't find any stream.");
     }
   }
 
@@ -122,13 +122,13 @@ int audioDecoder(char *url)
             }
             else
             {
-              WARN("invalid pts. ignore it.");
+              //WARN("invalid pts. ignore it.");
             }
           }
         }
         else
         {
-          WARN("packet error. skip it.");
+          //WARN("packet error. skip it.");
 
           /* if error, we skip the frame */
           tmpPkt.size = 0;
@@ -160,5 +160,6 @@ void dumpMem(void *ptr, int size)
 int main(int argc, char const *argv[])
 {
   /* code */
+  audioDecoder("aaa");
   return 0;
 }
