@@ -179,7 +179,7 @@ void parse_urls(const char *parsetag)
         gfp = fopen("output_mp4.txt", "a");
     }
     int i = 0;
-    int index = 16;
+    int index = 1;//16;
     for (i = 0; i <= index; ++i)
     {
       sprintf(file_name, "/mnt/hgfs/E/download/split_csv_file/mp4_urls_%d_outfile.txt", i);
@@ -203,10 +203,37 @@ void parse_urls(const char *parsetag)
   }
 }
 
-int main(int argc, char const *argv[])
+void Test_parseurls()
 {
   parse_urls(PARSE_TAG);
 
   fprintf(stdout, "access_sum=%lld\n", access_sum);
+}
+
+void Test_args()
+{
+  valist_args("/moov");
+  valist_args("/moov", 1);
+}
+
+void Test_Realloc()
+{
+
+}
+
+void Test_cost()
+{
+  multi_read_mutex_cost();
+}
+
+int main(int argc, char const *argv[])
+{
+  Test_parseurls();
+  //Test_args();
+  //realloc_exam();
+
+  //Test_cost();
+
+  //realloc_exam2();
   return 0;
 }

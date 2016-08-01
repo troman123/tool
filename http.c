@@ -312,7 +312,7 @@ static char *response_head_strdup(struct resp_headers *resp, char *name)
     return value;
 }
 
-int parseHttpRespond(struct http_sys_t *p_http, FILE *fp, int filetype, int count)
+int parseHttpRespond(struct http_sys_t *p_http, FILE *fp, int filetype, int count, const char *url)
 {
     struct request *req = p_http->req;
     int fd = req->sockfd;
@@ -387,7 +387,7 @@ int parseHttpRespond(struct http_sys_t *p_http, FILE *fp, int filetype, int coun
         int readSize = parseMp4Box(fd, &type);
 
         fprintf(stdout, "parseMp4Box %lu %lu %d %d\n", content_len, (type == 0) ? readSize : (content_len - readSize), type, count);
-        fprintf(fp, "%lu\t%lu\t%d\t%d\n", content_len, (type == 0) ? readSize : content_len - readSize, type, count);
+        fprintf(fp, "%lu\t%lu\t%d\t%d\t%s\n", content_len, (type == 0) ? readSize : content_len - readSize, type, count, url);
     }
     else
     {
@@ -404,7 +404,7 @@ void http_task(const char *url, FILE *output, int filetype, int count)
     if (req != NULL)
     {
         //CHECK_STATE checkstate = CHECK_STATE_REQUESTLINE;
-        parseHttpRespond(p_http, output, filetype, count);
+        parseHttpRespond(p_http, output, filetype, count, url);
 
         close(req->sockfd);
         request_free(req);

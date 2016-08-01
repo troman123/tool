@@ -1,7 +1,7 @@
 CFLAGS = -g -lpthread
 
-tool: main.o http.o util.o threadpool.o base64.o urldecode.o mp4parser.o
-	gcc  -o tool main.o http.o util.o threadpool.o base64.o urldecode.o mp4parser.o ${CFLAGS}
+tool: main.o http.o util.o threadpool.o base64.o urldecode.o mp4parser.o ffmpeg/test/utils.o ffmpeg/test/videogen.o
+	gcc  -o tool main.o http.o util.o threadpool.o base64.o urldecode.o mp4parser.o ffmpeg/test/utils.o ffmpeg/test/videogen.o ${CFLAGS}
 
 
 main.o: main.c
@@ -24,6 +24,14 @@ urldecode.o: urldecode.c
 
 mp4parser.o: mp4parser.c
 	gcc -c ${CFLAGS} mp4parser.c
+
+ffmpeg/test/utils.o: ffmpeg/test/utils.c
+	gcc -c ${CFLAGS} ffmpeg/test/utils.c -o ffmpeg/test/utils.o
+
+ffmpeg/test/videogen.o: ffmpeg/test/videogen.c
+	gcc -c ${CFLAGS} ffmpeg/test/videogen.c -o ffmpeg/test/videogen.o
+
+
 
 exec:
 	./tool

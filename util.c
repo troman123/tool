@@ -9,6 +9,7 @@
 #include <assert.h>
 #include <netdb.h>
 #include <errno.h>
+#include <stdarg.h>
 
 /* from UNP */
 ssize_t writen(int fd, void *usrbuf, size_t n)
@@ -272,4 +273,108 @@ char *base64url_to_base64(const char *data)
   }
 
   return tmp;
+}
+
+
+void valist_args(const char *psz_fmt, ... )
+{
+  va_list args;
+  va_start( args, psz_fmt );
+
+  char *psz_buffer;
+  if( vasprintf( &psz_buffer, psz_fmt, args ) != -1)
+  {
+    fprintf(stdout, "%s\n", psz_buffer);
+    free(psz_buffer);
+  }
+  va_end( args );
+}
+
+void realloc_exam()
+{
+  int input,n;
+  int count = 0;
+  int* numbers = NULL;
+  int* more_numbers = NULL;
+
+  do {
+     printf ("Enter an integer value (0 to end): ");
+     scanf ("%d", &input);
+     count++;
+
+     more_numbers = (int*) realloc (numbers, count * sizeof(int));
+
+     if (more_numbers!=NULL)
+     {
+       numbers=more_numbers;
+       numbers[count-1]=input;
+     }
+     else
+     {
+       free (numbers);
+       puts ("Error (re)allocating memory");
+       exit (1);
+     }
+  } while (input!=0);
+
+  printf ("Numbers entered: ");
+  for (n=0;n<count;n++)
+  {
+    printf ("%d ",numbers[n]);
+  }
+  free (numbers);
+}
+
+void realloc_exam2()
+{
+  int *arr = NULL;
+  arr = realloc(arr, sizeof(int) * 1);
+  arr[0] = 1;
+
+  fprintf(stdout, "%d\n", arr[0]);
+
+  arr = realloc(arr, sizeof(int) * 1);
+
+  fprintf(stdout, "%d\n", arr[0]);
+  // arr[1] = 2;
+
+  // fprintf(stdout, "%d %d \n", arr[0], arr[1]);
+  // fprintf(stdout, "%p %p \n", &arr[0], &arr[1]);
+  // fprintf(stdout, "%p %p \n", arr[0], arr[1]);
+}
+
+void multi_read_mutex_cost()
+{
+  pthread_mutex_t lock;
+  pthread_mutex_init(&lock);
+  int i = 0;
+  struct timeval tv;
+  gettimeofday(&tv, NULL);
+  int64_t begin = tv.tv_sec * 1000000 + tv.tv_usec;
+  int j = 0;
+  while (i++ < 10000)
+  {
+    pthread_mutex_lock(&lock);
+    j++;
+    pthread_mutex_unlock(&lock);
+
+  }
+  gettimeofday(&tv, NULL);
+  int64_t cost = (tv.tv_sec * 1000000 + tv.tv_usec) - begin;
+
+  fprintf(stdout, "%lld\n", cost);
+}
+
+void sscanf_demo()
+{
+  const char *url = "http://fanhe.dwstatic.com/shortvideo/02/20167/006/3d93b82e6cd37c57d46c91f792f70000.mp4?traceid=352105061394640_0_1469438902218&startRange=1563672&s=1563672";
+  uint64_t pos = 0;
+  const char *tmp = NULL;
+  if ((tmp = strstr(url, "&startRange=")) != NULL)
+  {
+    sscanf(tmp, "%*[^0-9]%llu", &pos);
+  }
+  
+
+  fprintf(stdout, "sscanf_demo %llu\n", pos);
 }
