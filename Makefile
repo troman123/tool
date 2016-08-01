@@ -1,4 +1,9 @@
-CFLAGS = -g -lpthread
+CFLAGS = -g -lpthread `pkg-config --cflags libavcodec` `pkg-config --cflags libavformat` `pkg-config --cflags libavutil`
+
+LDFLAGS = `pkg-config --libs libavcodec` `pkg-config --libs libavformat` `pkg-config --libs  libswresample` 
+
+audio:audiodecoder.o
+	gcc -o audio audiodecoder.o ${LDFLAGS}
 
 tool: main.o http.o util.o threadpool.o base64.o urldecode.o mp4parser.o ffmpeg/test/utils.o ffmpeg/test/videogen.o
 	gcc  -o tool main.o http.o util.o threadpool.o base64.o urldecode.o mp4parser.o ffmpeg/test/utils.o ffmpeg/test/videogen.o ${CFLAGS}
@@ -31,7 +36,8 @@ ffmpeg/test/utils.o: ffmpeg/test/utils.c
 ffmpeg/test/videogen.o: ffmpeg/test/videogen.c
 	gcc -c ${CFLAGS} ffmpeg/test/videogen.c -o ffmpeg/test/videogen.o
 
-
+audiodecoder.o: audiodecoder.c
+	gcc -c audiodecoder.c 
 
 exec:
 	./tool

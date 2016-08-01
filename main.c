@@ -11,6 +11,10 @@
 #include <netdb.h>
 #include <errno.h>
 
+#define BUFFER_SIZE 4096
+#define FFMIN(a, b) (a < b) ? a : b
+#define MAX_URL_SIZE 4096
+
 #define THREAD 1
 #define QUEUE  4
 
