@@ -10,8 +10,16 @@
 #define CAST_SAMPLE_RATE(x) (((x) > MAX_SAMPLE_RATE) ? DEFAULT_SAMPLE_RATE : (x))
 #define CAST_CHANNELS(x)    (((x) >= 2) ? 2 : 1)
 
+DECLARE_ALIGNED(16, uint8_t, mTargetAudioBuffer)[AVCODEC_MAX_AUDIO_FRAME_SIZE * 4];
+
+typedef struct AudioPkt {
+  int size;
+  uint8_t *data;
+} AudioPkt;
+
 int audioDecoder(char *url)
 {
+  av_register_all();
   AVFormatContext *mFormatContext;
   mFormatContext = avformat_alloc_context();
   if (avformat_open_input(&mFormatContext, url, NULL, NULL) != 0)
@@ -23,6 +31,7 @@ int audioDecoder(char *url)
 
   int mTrackCount = 0;
   AVStream *mAudioStream;
+  int mAudioStreamIndex = -1;
   if (avformat_find_stream_info(mFormatContext, NULL) >= 0)
   {
     mTrackCount = mFormatContext->nb_streams;
@@ -34,7 +43,7 @@ int audioDecoder(char *url)
         if (mFormatContext->streams[i]->codec->codec_type == AVMEDIA_TYPE_AUDIO)
         {
           mAudioStream = mFormatContext->streams[i];
-
+          mAudioStreamIndex = i;
           break;
         }
       }
@@ -50,11 +59,8 @@ int audioDecoder(char *url)
   int mSampleBytes;
   double mAudioSampleRate;
   double mAudioTimeBase;
-  DECLARE_ALIGNED(16, uint8_t, mTargetAudioBuffer)[AVCODEC_MAX_AUDIO_FRAME_SIZE * 4];
 
   mFrame = avcodec_alloc_frame();
-
-  mFormatContext = avformat_alloc_context();
 
   AVCodecContext *mCodecContext = mAudioStream->codec;
   AVCodec *codec = avcodec_find_decoder(mCodecContext->codec_id);
@@ -90,76 +96,124 @@ int audioDecoder(char *url)
       mAudioTimeBase = av_q2d(mAudioStream->time_base);
     }
 
-    AVPacket *pkt;
-    int gotFrame = 0;
+    AVPacket avpacket;
+    av_init_packet( &avpacket );
+    AVPacket *pkt = &avpacket;
+
+    uint8_t audioBuf[4096] = {0};
+    int bufIndex = 0;
+
+    int copyCount = 0;
     while (av_read_frame(mFormatContext, pkt) >= 0)
     {
-      avcodec_get_frame_defaults(mFrame);
-      AVPacket tmpPkt = *pkt;
-      int size;
-      while (tmpPkt.size > 0)
+      fprintf(stdout, "av_read_frame avpacket AVBufferRef *buf=%p pts=%lld dts=%lld size=%d flags=%d, side_data=%p side_data_elems=%d pos=%lld convergence_duration=%lld index=%d mAudioStreamIndex=%d\n",
+       pkt->buf, pkt->pts, pkt->dts, pkt->size, pkt->flags, pkt->side_data, pkt->side_data_elems, pkt->pos, pkt->convergence_duration, pkt->stream_index, mAudioStreamIndex);
+
+      if (pkt->stream_index == mAudioStreamIndex)
       {
-        size = avcodec_decode_audio4(mCodecContext, mFrame, &gotFrame, &tmpPkt);
-        if (size > 0)
+        if (copyCount < 2)
         {
-          tmpPkt.size -= size;
-          tmpPkt.data += size;
-
-          if (gotFrame)
-          {
-            int pts = av_frame_get_best_effort_timestamp(mFrame);
-            if (pts != -1)
-            {
-              //VERBOSE("frame completed. pts=%d", pts);
-
-              uint8_t *outBuffer[] = { (uint8_t *) mTargetAudioBuffer };
-              int outCount = sizeof (mTargetAudioBuffer) / mSampleBytes;
-              const uint8_t **inBuffer = (const uint8_t **) mFrame->extended_data;
-              int inCount = mFrame->nb_samples;
-              int convRet = swr_convert(mSwrContext, outBuffer, outCount, inBuffer, inCount);
-
-              //render(mTargetAudioBuffer, convRet * mSampleBytes, pts);
-            }
-            else
-            {
-              //WARN("invalid pts. ignore it.");
-            }
-          }
+          memcpy(audioBuf + bufIndex, pkt->data, pkt->size);
+          bufIndex += pkt->size;
+          copyCount++;
         }
         else
         {
-          //WARN("packet error. skip it.");
-
-          /* if error, we skip the frame */
-          tmpPkt.size = 0;
+            decodeAudioPkt(mCodecContext, mSwrContext, mFrame, mAudioStreamIndex, mSampleBytes, audioBuf, bufIndex);
+            bufIndex = 0;
+            copyCount = 0;
         }
       }
     }
-  }
-    swr_free(&mSwrContext);
-    av_free(mFrame);
-    avcodec_close(mCodecContext);
-    avformat_close_input(&mFormatContext);
 
-    return 0;
+      av_free_packet(pkt);
+  }
+
+
+  swr_free(&mSwrContext);
+  av_free(mFrame);
+  avcodec_close(mCodecContext);
+  avformat_close_input(&mFormatContext);
+
+  return 0;
 }
 
-void dumpMem(void *ptr, int size)
+void decodeAudioPkt(AVCodecContext *mCodecContext, SwrContext *mSwrContext, AVFrame *mFrame, int mAudioStreamIndex, int mSampleBytes, uint8_t *buf, int bufSize)
+{
+  AVPacket avpacket;
+  av_init_packet( &avpacket );
+
+  avpacket.size = bufSize;
+  avpacket.data = buf;
+
+  int gotFrame = 0;
+  dumpMem(avpacket.data, avpacket.size);
+  avcodec_get_frame_defaults(mFrame);
+  AVPacket tmpPkt = avpacket;
+  int size;
+  while (tmpPkt.size > 0)
+  {
+    size = avcodec_decode_audio4(mCodecContext, mFrame, &gotFrame, &tmpPkt);
+
+    fprintf(stdout, "avcodec decode audio size=%d gotFrame=%d\n", size, gotFrame);
+
+    if (size > 0)
+    {
+      tmpPkt.size -= size;
+      tmpPkt.data += size;
+
+      if (gotFrame)
+      {
+        int pts = av_frame_get_best_effort_timestamp(mFrame);
+        if (pts != -1)
+        {
+          fprintf(stdout, "frame completed. pts=%d", pts);
+
+          uint8_t *outBuffer[] = { (uint8_t *) mTargetAudioBuffer };
+          int outCount = sizeof (mTargetAudioBuffer) / mSampleBytes;
+
+          const uint8_t **inBuffer = (const uint8_t **) mFrame->extended_data;
+          int inCount = mFrame->nb_samples;
+
+          int convRet = swr_convert(mSwrContext, outBuffer, outCount, inBuffer, inCount);
+
+          fprintf(stdout, "swr_convert outCount=%d inCount=%d convRet=%d \n", outCount, inCount, convRet);
+          //render(mTargetAudioBuffer, convRet * mSampleBytes, pts);
+        }
+        else
+        {
+          //WARN("invalid pts. ignore it.");
+        }
+      }
+    }
+    else
+    {
+      //WARN("packet error. skip it.");
+
+      /* if error, we skip the frame */
+      tmpPkt.size = 0;
+    }
+  }
+}
+
+void dumpMem(uint8_t *ptr, int size)
 {
   char buf[4097] = {0};
-  int printLen = 4096 > size ? size : 4096;
+  int printLen = 4096 > size * 2 ? size * 2 : 4096;
   int index = 0;
   char *tmp = buf;
   while (index < printLen)
   {
-    snprintf(tmp + index, 2, "%2x", ptr + index);
+    sprintf(tmp + index, "%02x", *(ptr++));
     index += 2;
   }
+
+  fprintf(stdout, "dumpMem %s\n", buf);
 }
 
 int main(int argc, char const *argv[])
 {
   /* code */
-  audioDecoder("aaa");
+  audioDecoder("/mnt/hgfs/D/test/video/youkuYY.mp4");
   return 0;
 }
