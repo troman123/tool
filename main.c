@@ -20,7 +20,7 @@
 
 #include "urldecode.h"
 static FILE *gfp = NULL;
-static int URL_ACCESS_TIMES = 100;
+static int URL_ACCESS_TIMES = 0;
 static uint64_t access_sum = 0;
 
 typedef struct thread_sys_t
@@ -44,8 +44,8 @@ void thread_task(void *arg)
     pthread_mutex_unlock(&lock);
 
     fprintf(stdout, "read line read_line=%s\n", read_line);
-    sscanf(read_line,"\"%s\t%d", read_line, &count);
-
+    sscanf(read_line,"%s\t%d", read_line, &count);
+    fprintf(stderr, "read line read_line read_line=%s  count=%d\n", read_line, count);
     if (count >= URL_ACCESS_TIMES)
     {
       access_sum += count;
@@ -182,6 +182,20 @@ void parse_urls(const char *parsetag)
     {
         gfp = fopen("output_mp4.txt", "a");
     }
+#define TMP_TEST 1
+
+#ifdef TMP_TEST
+    fp = fopen("mp4_zhaoguoqing.txt", "r");
+    if (fp != NULL)
+    {
+      thread_pool_task(fp, FILE_TYPE_MP4);
+      fclose(fp);
+    }
+    else
+    {
+      perror("open file fail2.");
+    }
+#else
     int i = 0;
     int index = 1;//16;
     for (i = 0; i <= index; ++i)
@@ -199,8 +213,9 @@ void parse_urls(const char *parsetag)
         perror("open file fail2.");
       }
     }
-  }
+#endif
 
+  }
   if (gfp != NULL)
   {
     fclose(gfp);
