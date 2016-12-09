@@ -1,0 +1,1000 @@
+  878  tar -zxvf pptp-1.8.0.tar.gz  -C /home/ts/pptp/
+  879  ll /home/ts/pptp/
+  880  ll /home/ts/pptp/pptp-1.8.0/
+  881  ls
+  882  rm -rf pptp-1.8.0
+  883  cd ..
+  884  ls
+  885  cd /home/ts/pptp/
+  886  ls
+  887  cd pptp-1.8.0/
+  888  ls
+  889  make
+  890  make install
+  891  sudo make install
+  892  pptp
+  893  whereis pptp
+  894  make uninstall
+  895  sudo make uninstall
+  896  pptp
+  897  sudo apt-get install pptp-linux
+  898  pptp
+  899  sudo apt-get install pptp-linux
+  900  ls 
+  901  cd source/
+  902  ls
+  903  g++ test.cpp 
+  904  ls
+  905  ./a.out a
+  906  ./a.out ab
+  907  ./a.out -a b
+  908  ./a.out -a -b
+  909  g++ test.cpp 
+  910  ./a.out -a -b
+  911  g++ test.cpp 
+  912  ./a.out 
+  913  g++ test.cpp 
+  914  ./a.out 
+  915  ls
+  916  cd /usr/local/
+  917  ls
+  918  cd ffmpeg/m
+  919  cd ffmpeg/
+  920  ls
+  921  ll
+  922  cd bin/
+  923  ls
+  924  cd include
+  925  cd ..
+  926  ls
+  927  cd include/
+  928  ls
+  929  whereis ffmpeg
+  930  cd /usr/local/ffmpeg/
+  931  ls
+  932  /usr/local/ffmpeg/bin/ffplay 
+  933  /usr/local/ffmpeg/bin/ffplay /home/ts/FFmpeg/FFMPEG/aa.mp4 
+  934  /usr/local/ffmpeg/bin/ffplay /home/ts/FFmpeg/FFMPEG/a2.mp4 
+  935  cd /home/ts/
+  936  cd /home/ts/FFmpeg/FFMPEG/
+  937  ls
+  938  gcc tutorial2_new.c 
+  939  gcc tutorial2_new.c -l /usr/local/ffmpeg/include/ -L /usr/local/ffmpeg/lib/
+  940  gcc tutorial2_new.c -l/usr/local/ffmpeg/include/ -L /usr/local/ffmpeg/lib/
+  941  gcc tutorial2_new.c -l/usr/local/ffmpeg/include/ -L /usr/local/ffmpeg/lib/
+  942  gcc tutorial2_new.c -l/usr/local/ffmpeg/include/ -L/usr/local/ffmpeg/lib/
+  943  gcc tutorial2_new.c -l/usr/local/ffmpeg/include -L/usr/local/ffmpeg/lib
+  944  vi tutorial2_new.c 
+  945  gcc -o test tutorial2_new.c -l/usr/local/ffmpeg/include -L/usr/local/ffmpeg/lib
+  946  vi tutorial2_new.c 
+  947  gcc -o test tutorial2_new.c -l/usr/local/ffmpeg/include -L/usr/local/ffmpeg/lib
+  948  gcc -o test tutorial2_new.c -l/usr/local/ffmpeg/include -L/usr/local/ffmpeg/lib -lavformat -lavcodec -lavtuil
+  949  ll /usr/local/ffmpeg/include/
+  950  sudo gcc -o test tutorial2_new.c -l/usr/local/ffmpeg/include -L/usr/local/ffmpeg/lib -lavformat -lavcodec -lavtuil
+  951  sudo gcc -o test tutorial2_new.c -l/usr/local/ffmpeg/include -L/usr/local/ffmpeg/lib -lavformat -lavcodec -lavtuil -lz -lm
+  952  gcc -o test tutorial2_new.c -I/usr/local/ffmpeg/include -L/usr/local/ffmpeg/lib -lavformat -lavcodec -lavtuil
+  953  gcc -o test tutorial2_new.c -I/usr/local/ffmpeg/include -L/usr/local/ffmpeg/lib
+  954  gcc -o test tutorial2_new.c -I/usr/local/ffmpeg/include -L/usr/local/ffmpeg/lib -lavformat -lavcodec -lavtuil
+  955  ls
+  956  gcc -o test tutorial2_new.c -I/usr/local/ffmpeg/include -L/usr/local/ffmpeg/lib -lavformat -lavcodec -lavtuil
+  957  gcc -o test tutorial2_new.c -I/usr/local/ffmpeg/include -L/usr/local/ffmpeg/lib -lavformat -lavcodec -lavutil
+  958  gcc -o test tutorial2_new.c -I/usr/local/ffmpeg/include -L/usr/local/ffmpeg/lib -lavformat -lavcodec -lavutil -lm
+  959  gcc -o test tutorial2_new.c -I/usr/local/ffmpeg/include -L/usr/local/ffmpeg/lib -lavformat -lavcodec -lavutil -lm -lz
+  960  ll /usr/local/ffmpeg/lib/
+  961  gcc -o test tutorial2_new.c -I/usr/local/ffmpeg/include -L/usr/local/ffmpeg/lib -lavformat -lavcodec -lavutil -lswscale -lm -lz
+  962  gcc -o test tutorial2_new.c -I/usr/local/ffmpeg/include -L/usr/local/ffmpeg/lib -lz -lavformat -lavcodec -lavutil -lswscale -lm
+  963  gcc -o test tutorial2_new.c -I/usr/local/ffmpeg/include -L/usr/local/ffmpeg/lib 
+  964  ll /usr/local/ffmpeg/lib/
+  965  gcc -o test tutorial2_new.c -I/usr/local/ffmpeg/include -L/usr/local/ffmpeg/lib 
+  966  gcc -o test tutorial2_new.c -I/usr/local/ffmpeg/include -L/usr/local/ffmpeg/lib -lm
+  967  gcc -o test tutorial2_new.c -I/usr/local/ffmpeg/include -L/usr/local/ffmpeg/lib -lm -lz
+  968  ll /usr/local/ffmpeg/lib/
+  969  gcc -o test tutorial2_new.c -I/usr/local/ffmpeg/include -lavutil -lavformat -lavcodec -lz -lm
+  970  ls
+  971  vi subtitle3.c 
+  972  gcc -o test subtitle3.c -I/usr/local/ffmpeg/include -lavutil -lavformat -lavcodec -lz -lm
+  973  ls
+  974  /usr/local/lib/
+  975  ls
+  976  gcc -o test subtitle3.c -I/usr/local/ffmpeg/include -lavutil -lavformat -lavcodec -lz -lm
+  977  ll /usr/lib
+  978  ll /usr/lib | grep av
+  979  ls -n /usr/local/ffmpeg/lib/* /usr/lib
+  980  ln -s  /usr/local/ffmpeg/lib/* /usr/lib
+  981  gcc -o test subtitle3.c -I/usr/local/ffmpeg/include -lavutil -lavformat -lavcodec -lz -lm
+  982  gcc -o test subtitle3.c -I/usr/local/ffmpeg/include -L /usr/local/ffmpeg/include/
+  983  gcc  subtitle3.c -I/usr/local/ffmpeg/include -L /usr/local/ffmpeg/include/ -o test
+  984  gcc  subtitle3.c -I/usr/local/ffmpeg/include -L /usr/local/ffmpeg/lib -o test
+  985  gcc  subtitle3.c -I/usr/local/ffmpeg/include  -o test
+  986  gcc  subtitle3.c -I/usr/local/ffmpeg/include 
+  987  gcc  subtitle3.c -I/usr/local/ffmpeg/include -lavcodec
+  988  gcc  subtitle3.c -I/usr/local/ffmpeg/include -lavcodec -lm
+  989  gcc  subtitle3.c -I/usr/local/ffmpeg/include -L /usr/local/ffmpeg/lib -o test
+  990  vi subtitle3.c 
+  991  gcc  subtitle3.c -I/usr/local/ffmpeg/include -L /usr/local/ffmpeg/lib -o test
+  992  gcc  subtitle3.c -I/usr/local/ffmpeg/include -L /usr/local/ffmpeg/lib -lavcodec -o test
+  993  cd /usr/lib/
+  994  ll |
+  995  ll | grep av
+  996  rm -r libavcodec*
+  997  sudo rm -r libavcodec*
+  998  ll | grep av
+  999  sudo rm -r libavdevice*
+ 1000  sudo rm -r libavfilter*
+ 1001  sudo rm -r libavformat*
+ 1002  sudo rm -r libavutil*
+ 1003  ls
+ 1004  ll /usr/local/ffmpeg/lib/
+ 1005  sudo rm -r libswresample*
+ 1006  sudo rm -r libswscale*
+ 1007  cd pkgconfig/
+ 1008  ll
+ 1009  rm -r libavcodec.pc
+ 1010  sudo rm -r libavcodec.pc
+ 1011  sudo rm -r libavdevice.pc 
+ 1012  sudo rm -r libavformat.pc 
+ 1013  sudo rm -r libavutil.pc 
+ 1014  sudo rm -r libswresample.pc 
+ 1015  sudo rm -r libswscale.pc 
+ 1016  ls
+ 1017  sudo rm -r libavfilter.pc 
+ 1018  ls
+ 1019  ll
+ 1020  cd /usr/local/ffmpeg/
+ 1021  ls
+ 1022  cd lib/
+ 1023  ls
+ 1024  ll
+ 1025  cd pkgconfig/
+ 1026  ls
+ 1027  vi libavcodec.pc 
+ 1028  ls
+ 1029  ll
+ 1030  ll /usr/lib/pkgconfig/
+ 1031  whereis winetricks
+ 1032  sudo apt-get install wine
+ 1033  ps
+ 1034  nohup
+ 1035  whereis nohup
+ 1036  ls
+ 1037  wine
+ 1038  winetricks msxml3 gdiplus riched20 riched30 ie6 vcrun6 vcrun2005sp1
+ 1039  cd /home/ts/.cache/winetricks/msxml3/
+ 1040  ls
+ 1041  cd ..
+ 1042  ls
+ 1043  mv /home/ts/download/msxml3.msi msxml3/.
+ 1044  ls
+ 1045  cd msxml3/
+ 1046  ls
+ 1047  winetricks msxml3 gdiplus riched20 riched30 ie6 vcrun6 vcrun2005sp1
+ 1048  ls
+ 1049  cd ..
+ 1050  kls
+ 1051  ls
+ 1052  cd ie6/
+ 1053  ls
+ 1054  cd ..
+ 1055  cd vcrun6/
+ 1056  ls
+ 1057  cd ..
+ 1058  ls
+ 1059  ll -r .
+ 1060  winetricks vcrun6/
+ 1061  winetricks vcrun6
+ 1062  mv /home/ts/download/vc6redistsetup_enu.exe  .
+ 1063  ls
+ 1064  mv vc6redistsetup_enu.exe vcrun6/
+ 1065  ls
+ 1066  winetricks vcrun6
+ 1067  winetricks vcrun2005sp1
+ 1068  winetricks riched30
+ 1069  unzip -o /home/ts/download/tenetRTX.zip 
+ 1070  unzip -o /home/ts/download/tenetRTX.zip -d .
+ 1071  ls
+ 1072  lll
+ 1073  ll
+ 1074  mv ╠┌╤╕RTX.exe rtx.exe
+ 1075  wine rtx.exe 
+ 1076  rtx.exe
+ 1077  sp
+ 1078  ps
+ 1079  kill RTX.exe
+ 1080  kill 12851
+ 1081  ps
+ 1082  cd FFmpeg/
+ 1083  ls
+ 1084  cd FFMPEG/
+ 1085  LS
+ 1086  ls
+ 1087  l
+ 1088  ll
+ 1089  gcc demo.cpp 
+ 1090  gcc demo.cpp -I /usr/local/ffmpeg/include/
+ 1091  gcc demo.cpp -I /usr/local/ffmpeg/include/ -L /usr/local/ffmpeg/lib/
+ 1092  gcc demo.cpp -I /usr/local/ffmpeg/include/ -L /usr/local/ffmpeg/lib/ -lavutil
+ 1093  gcc demo.cpp -I /usr/local/ffmpeg/include/ -L /usr/local/ffmpeg/lib/ -lavutil -lfff
+ 1094  gcc demo.cpp -I /usr/local/ffmpeg/include/ -L /usr/local/ffmpeg/lib/ -lavutil -lavformat
+ 1095  gcc demo.cpp -I /usr/local/ffmpeg/include/ -L /usr/local/ffmpeg/lib/ -lavutil -lavformat -lm
+ 1096  gcc demo.cpp -I /usr/local/ffmpeg/include/ -L /usr/local/ffmpeg/lib/ -lavutil -lavformat -lz -lm
+ 1097  vi /usr/local/ffmpeg/include/libavutil/common.h 
+ 1098  g++ demo.cpp -I /usr/local/ffmpeg/include/ -L /usr/local/ffmpeg/lib/ -lavutil -lavformat -lz -lm
+ 1099  g++ demo.cpp -I /usr/local/ffmpeg/include/ -L /usr/local/ffmpeg/lib/ 
+ 1100  g++ --version
+ 1101  cd /home/ts/.cache/winetricks/
+ 1102  ls
+ 1103  ls -l | grep "^-"|wc -l
+ 1104  ls -lR | grep "^-"|wc -l
+ 1105  ls -lR 
+ 1106  ls -R
+ 1107  ll
+ 1108  ll msls31/
+ 1109  ps
+ 1110  ps -A
+ 1111  ps -A | grep rtx
+ 1112  cd /home/ts/.wine/
+ 1113  ls
+ 1114  ll
+ 1115  ls
+ 1116  cd ps
+ 1117  ps
+ 1118  git /home/ts/download/
+ 1119  ls
+ 1120  history
+ 1121  git /home/ts/download/
+ 1122  ls
+ 1123  cd /home/ts/download/
+ 1124  ls
+ 1125  ll
+ 1126  tar -jxvf smartgithg-generic-5_0_7.tar.gz 
+ 1127  tar -zxvf smartgithg-generic-5_0_7.tar.gz 
+ 1128  ls
+ 1129  cd smartgithg-5_0_7/
+ 1130  ls
+ 1131  cd bin/
+ 1132  ls
+ 1133  ./smartgithg.sh 
+ 1134  ls
+ 1135  history
+ 1136  sudo apt-get install gnome-panel
+ 1137  ps -A | grep -i re
+ 1138  kill 4349
+ 1139  ps -A | grep -i rtx
+ 1140  kill -9 11480
+ 1141  cd /home/ts/source/
+ 1142  ls
+ 1143  g++ test.cpp 
+ 1144  ./a.out 
+ 1145  g++ test.cpp 
+ 1146  ./a.out 
+ 1147  g++ test.cpp 
+ 1148  ./a.out 
+ 1149  g++ test.cpp 
+ 1150  ./a.out 
+ 1151  g++ test.cpp 
+ 1152  ./a.out 
+ 1153  g++ test.cpp 
+ 1154  ./a.out 
+ 1155  g++ test.cpp 
+ 1156  ./a.out 
+ 1157  g++ test.cpp 
+ 1158  ./a.out 
+ 1159  g++ test.cpp 
+ 1160  ./a.out 
+ 1161  g++ test.cpp 
+ 1162  ./a.out 
+ 1163  g++ test.cpp 
+ 1164  ./a.out 
+ 1165  g++ test.cpp 
+ 1166  ./a.out 
+ 1167  g++ test.cpp 
+ 1168  ./a.out 
+ 1169  g++ test.cpp 
+ 1170  ./a.out 
+ 1171  g++ test.cpp 
+ 1172  ./a.out 
+ 1173  g++ test.cpp 
+ 1174  ./a.out 
+ 1175  g++ test.cpp 
+ 1176  ./a.out 
+ 1177  g++ test.cpp 
+ 1178  ./a.out 
+ 1179  g++ test.cpp 
+ 1180  ./a.out 
+ 1181  g++ test.cpp 
+ 1182  ./a.out 
+ 1183  g++ test.cpp 
+ 1184  ./a.out 
+ 1185  g++ test.cpp 
+ 1186  ./a.out 
+ 1187  g++ test.cpp 
+ 1188  ./a.out 
+ 1189  g++ test.cpp 
+ 1190  ./a.out 
+ 1191  g++ test.cpp 
+ 1192  ./a.out 
+ 1193  g++ test.cpp 
+ 1194  ./a.out 
+ 1195  ls
+ 1196  cd /home/ts/git/kankanplayer
+ 1197  ls
+ 1198  ll
+ 1199  cd ..
+ 1200  ls
+ 1201  zip -r kankanplayer  kankan2.zip -P 151813
+ 1202  zip -r  kankan2.zip kankanplayer  -P 151813
+ 1203  ls
+ 1204  cd /media/000D3E18000D69BA/workspace/workspace5
+ 1205  ls
+ 1206  zip -r VPlayer20140305.zip VPlayer -P 151813
+ 1207  cd /home/ts/mediaplayer/MediaPlayer/
+ 1208  ls
+ 1209  $NDK/ndk-build
+ 1210  ps -A | grep -i RTX
+ 1211  kill 11375
+ 1212  ls
+ 1213  $NDK/ndk-build
+ 1214  ps -A | grep -i rtx
+ 1215  kill 16315
+ 1216  $NDK/ndk-build
+ 1217  kill 16315
+ 1218  $NDK/ndk-build
+ 1219  ps -A | grep -i rtx
+ 1220  kill 1525
+ 1221  kill 14814
+ 1222  ps -A | grep -i rtx
+ 1223  kill 1773
+ 1224  ps -A | grep -i rtx
+ 1225  kill 3298
+ 1226  $NDK/ndk-build
+ 1227  kill 3298
+ 1228  $NDK/ndk-build
+ 1229  pa -A | grep ecli
+ 1230  pa -A | grep -i ecli
+ 1231  ps -A | grep -i ecli
+ 1232  kill 12644
+ 1233  kill 12645
+ 1234  ps -A | grep -i ecli
+ 1235  $NDK/ndk-build
+ 1236  ls
+ 1237  cd ..
+ 1238  ls
+ 1239  zip MediaPlayernew.zip . -P 151813
+ 1240  zip -r MediaPlayernew.zip . -P 151813
+ 1241  ls
+ 1242  cd MediaPlayer/
+ 1243  ls
+ 1244  $NDK/ndk-build
+ 1245  cd ..
+ 1246  ls
+ 1247  rm MediaPlayernew.zip 
+ 1248  zip -r MediaPlayerNew.zip . -P 151813
+ 1249  ls
+ 1250  cd MediaPlayer/
+ 1251  $NDK/ndk-build
+ 1252  cd /home/ts/source/
+ 1253  ls
+ 1254  g++ test.cpp 
+ 1255  ./a.out 
+ 1256  g++ test.cpp 
+ 1257  ./a.out 
+ 1258  g++ test.cpp 
+ 1259  ./a.out 
+ 1260  g++ test.cpp 
+ 1261  ./a.out 
+ 1262  g++ test.cpp 
+ 1263  ./a.out 
+ 1264  g++ test.cpp 
+ 1265  ./a.out 
+ 1266  g++ test.cpp 
+ 1267  ./a.out 
+ 1268  g++ test.cpp 
+ 1269  ./a.out 
+ 1270  g++ test.cpp 
+ 1271  ./a.out 
+ 1272  g++ test.cpp 
+ 1273  ./a.out 
+ 1274  g++ test.cpp 
+ 1275  ./a.out 
+ 1276  g++ test.cpp 
+ 1277  ./a.out 
+ 1278  g++ test.cpp 
+ 1279  ./a.out 
+ 1280  cd /usr/
+ 1281  ls
+ 1282  cd include/
+ 1283  ls
+ 1284  ll
+ 1285  cd ..
+ 1286  ls
+ 1287  cd src/
+ 1288  ls
+ 1289  ll
+ 1290  git branch -a
+ 1291  cd /home/ts/git/
+ 1292  ls
+ 1293  cd kankanplayer/
+ 1294  ls
+ 1295  git branch -a
+ 1296  cd ..
+ 1297  ls
+ 1298  git clone git://sourceware.org/git/glibc.git
+ 1299  ls
+ 1300  cd glibc/
+ 1301  ls
+ 1302  ps -a | grep -i rtx
+ 1303  ps -A | grep -i rtx
+ 1304  kill 11841
+ 1305  git -b 
+ 1306  ls
+ 1307  ll -a
+ 1308  git status
+ 1309  git branch 
+ 1310  ls
+ 1311  git branch 
+ 1312  git checkout --track -b local_glibc_2.19  origin/release/2.19/master 
+ 1313  git branch 
+ 1314  git checkout local_glibc_2.19 
+ 1315  git pull
+ 1316  ls
+ 1317  git checkout master 
+ 1318  git status
+ 1319  git pull
+ 1320  git branch 
+ 1321  git checkout local_glibc_2.19 
+ 1322  ls
+ 1323  git status
+ 1324  ll
+ 1325  df -h
+ 1326  df
+ 1327  du -h
+ 1328  du -h --max-depth=1
+ 1329  du -h --max-depth=1 .
+ 1330  git branch 
+ 1331  git checkout master 
+ 1332  du -h --max-depth=1 .
+ 1333  du -h --max-depth=1 
+ 1334  ls
+ 1335  cd ..
+ 1336  ls
+ 1337  cd ..
+ 1338  ls
+ 1339  rm hs_err_pid*
+ 1340  ls
+ 1341  cd source/
+ 1342  ls
+ 1343  g++ test.cpp 
+ 1344  g++ test2.cpp 
+ 1345  ./a.out 
+ 1346  g++ test2.cpp 
+ 1347  ./a.out 
+ 1348  g++ test2.cpp 
+ 1349  ./a.out 
+ 1350  cd /home/ts/source/
+ 1351  ls
+ 1352  ./a.out 
+ 1353  g++ test.cpp 
+ 1354  ./a.out 
+ 1355  g++ test.cpp 
+ 1356  ./a.out 
+ 1357  cd /home/ts/mediaplayer/
+ 1358  ls
+ 1359  cd MediaPlayer
+ 1360  ls
+ 1361  ndk-build NDK_DEBUG=1 clean
+ 1362  $NDK/ndk-build NDK_DEBUG=1 clean
+ 1363  $NDK/ndk-build NDK_DEBUG=1 
+ 1364  git branch 
+ 1365  $NDK/ndk-build NDK_DEBUG=1 
+ 1366  $NDK/ndk-build
+ 1367  $NDK/ndk-build clean
+ 1368  $NDK/ndk-build
+ 1369  git checkout dev_debug 
+ 1370  gitg
+ 1371  $NDK/ndk-build
+ 1372  $NDK/ndk-build clean
+ 1373  $NDK/ndk-build 
+ 1374  gitg
+ 1375  git branch dev_bak
+ 1376  git checkout  dev_bak
+ 1377  git status
+ 1378  $NDK/ndk-build 
+ 1379  git status
+ 1380  gitg
+ 1381  git branch 
+ 1382  git checkout dev_debug 
+ 1383  git status
+ 1384  gitg
+ 1385  $NDK/ndk-build 
+ 1386  rm -r obj/
+ 1387  $NDK/ndk-build 
+ 1388  git status
+ 1389  git add jni/libsubtitle/*
+ 1390  git rm jni/subtitle/Android.mk
+ 1391  git rm jni/subtitle/parcelUtils.cpp
+ 1392  git rm jni/subtitle/subtitle.c
+ 1393  git status
+ 1394  git commit -m "文件夹修改"
+ 1395  git status
+ 1396  gitg
+ 1397  git branch 
+ 1398  git checkout dev_release 
+ 1399  gitg
+ 1400  cd /home/ts/mediaplayer/
+ 1401  ls
+ 1402  cd MediaPlayer
+ 1403  ls
+ 1404  $NDK/ndk-build
+ 1405  git status
+ 1406  git branch 
+ 1407  git log
+ 1408  git commit -m "简单修改"
+ 1409  git log
+ 1410  git status
+ 1411  git add jni/*
+ 1412  git add src/*
+ 1413  git status
+ 1414  git commit -m "字幕修改"
+ 1415  git status
+ 1416  gitg
+ 1417  git branch 
+ 1418  git checkout -b dev_test
+ 1419  git branch 
+ 1420  git describe 
+ 1421  git checkout dev
+ 1422  git status
+ 1423  $NDK/ndk-build
+ 1424  ndk-build
+ 1425  cd jni/
+ 1426  ndk-build
+ 1427  $NDK/ndk-build
+ 1428  ls
+ 1429  cd ..
+ 1430  $NDK/ndk-build
+ 1431  git status
+ 1432  git branch 
+ 1433  git checkout -b dev_release
+ 1434  git status
+ 1435  git add jni/*
+ 1436  $NDK/ndk-build
+ 1437  rm -r obj/
+ 1438  $NDK/ndk-build
+ 1439  rm -r obj/
+ 1440  $NDK/ndk-build
+ 1441  git status
+ 1442  git add jni/*
+ 1443  git src/*
+ 1444  git add src/*
+ 1445  git status
+ 1446  git commit -m "冗余修改"
+ 1447  git status
+ 1448  gitg
+ 1449  $NDK/ndk-build
+ 1450  gitg
+ 1451  git status
+ 1452  git add -m jni/Application.mk
+ 1453  git add jni/Application.mk
+ 1454  git status
+ 1455  git commit -m "xiugai"
+ 1456  git status
+ 1457  gitg
+ 1458  git checkout -b dev_debug
+ 1459  git status
+ 1460  gitg
+ 1461  $NDK/ndk-build
+ 1462  rm -r obj/
+ 1463  $NDK/ndk-build
+ 1464  git status
+ 1465  git add jni/Application.mk
+ 1466  git add jni/*
+ 1467  git status
+ 1468  git commit -m "debug"
+ 1469  git branch 
+ 1470  gitg
+ 1471  git checkout dev_release 
+ 1472  $NDK/ndk-build
+ 1473  git branch 
+ 1474  git checkout dev_debug 
+ 1475  ll
+ 1476  cd jni/
+ 1477  export PATH=$PATH:$NDK
+ 1478  ndk-build NDK_DEBUG=1 clean
+ 1479  ndk-build clean
+ 1480  rake clean
+ 1481  ruby -v
+ 1482  which ruby
+ 1483  sudo apt-get info ruby
+ 1484  apt-get info ruby
+ 1485  apt-cache info ruby
+ 1486  apt-cache show ruby
+ 1487  apt-cache show ruby1.9.3 
+ 1488  sudo apt-get install rake
+ 1489  sudo apt-get install rake 
+ 1490  which rake1.9
+ 1491  apt-cache search rake
+ 1492  rake
+ 1493  ndk-build clean
+ 1494  ndk-build 
+ 1495  ll ../libs/armeabi/
+ 1496  ll -h ../libs/armeabi/
+ 1497  vim Application.mk 
+ 1498  vi Application.mk 
+ 1499  ndk-build clean
+ 1500  ndk-build 
+ 1501  ndk-build NDK_DEBUG=1
+ 1502  ll ../libs/armeabi/
+ 1503  ll -h ../libs/armeabi/
+ 1504  ll
+ 1505  ll prebuilts/
+ 1506  ll
+ 1507  cd prebuilts/
+ 1508  ll
+ 1509  cd arm/
+ 1510  ll
+ 1511  ll -h
+ 1512  cd ../../../
+ 1513  ll
+ 1514  git st
+ 1515  git status
+ 1516  git st
+ 1517  git status
+ 1518  git checkout -- jni/Application.mk
+ 1519  git st
+ 1520  git config --global alias.st status
+ 1521  git config --global alias.co checkout
+ 1522  git config --global alias.ci commit
+ 1523  git st
+ 1524  git co dev_release 
+ 1525  git st
+ 1526  ndk-build NDK_DEBUG=1
+ 1527  ndk-build NDK_DEBUG=1 clean
+ 1528  ndk-build clean
+ 1529  ndk-build 
+ 1530  ll
+ 1531  ll -h libs/armeabi/
+ 1532  ll
+ 1533  git log
+ 1534  git show HEAD 
+ 1535  vim jni/Application.mk 
+ 1536  vi jni/Application.mk 
+ 1537  git co dev_debug 
+ 1538  vi jni/Application.mk 
+ 1539  git co dev_release 
+ 1540  ndk-build clean
+ 1541  ndk-build NDK_DEBUG=1 clean
+ 1542  ndk-build NDK_DEBUG=1
+ 1543  ll -h libs/armeabi/
+ 1544  git co dev_debug 
+ 1545  ndk-build NDK_DEBUG=1 clean
+ 1546  ndk-build NDK_DEBUG=1
+ 1547  ll -h libs/armeabi/
+ 1548  gitg
+ 1549  ls
+ 1550  git branch 
+ 1551  git checkout dev_release 
+ 1552  gitg
+ 1553  ndk-build NDK_DEBUG=1
+ 1554  rm -r obj/
+ 1555  ndk-build NDK_DEBUG=1
+ 1556  history
+ 1557  ndk-build
+ 1558  ls
+ 1559  $NDK/ndk-build 
+ 1560  ls
+ 1561  ll
+ 1562  ll libs/
+ 1563  ll libs/armeabi/
+ 1564  ll -h libs/armeabi/
+ 1565  ndk-build NDK_DEBUG=1
+ 1566  ll -h libs/armeabi/
+ 1567  git status
+ 1568  git add jni/*
+ 1569  git status
+ 1570  git commit -m "subtitles文件夹修改"
+ 1571  git status
+ 1572  git rm jni/subtitles/*
+ 1573  git add/rm jni/subtitle/Android.mk
+ 1574  git add jni/subtitle/Android.mk
+ 1575  git status
+ 1576  git rm jni/subtitle/Android.mk
+ 1577  git status
+ 1578  git rm jni/subtitle/parcelUtils.cpp
+ 1579  git rm jni/subtitle/subtitle.c
+ 1580  git status
+ 1581  git commit -m "delete"
+ 1582  gitg
+ 1583  git branch 
+ 1584  ls
+ 1585  ndk-build
+ 1586  ndk-build NDK_DEBUG=1
+ 1587  ndk-build
+ 1588  rm -r obj/
+ 1589  ndk-build
+ 1590  sudo apt-get purge ruby1.9.1 
+ 1591  git clone https://github.com/sstephenson/rbenv.git ~/.rbenv
+ 1592  echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc
+ 1593  echo 'eval "$(rbenv init -)"' >> ~/.bashrc
+ 1594  type rbenv
+ 1595  git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
+ 1596  rbenv list
+ 1597  rbenv install 
+ 1598  rbenv install  -l
+ 1599  apt-cache info libreadline
+ 1600  apt-cache show libreadline
+ 1601  apt-cache search readline
+ 1602  apt-cache show libreadline-dev
+ 1603  sudo apt-get install libreadline-dev
+ 1604  rbenv install 2.1.1 
+ 1605  rbenv install 2.1.9
+ 1606  rbenv install 2.1.0
+ 1607  rbenv install 2.1.9
+ 1608  rbenv install 2.1.0
+ 1609  rbenv install --list
+ 1610  rake
+ 1611  sudo apt-get install libssl-dev
+ 1612  sudo apt-get autoremove
+ 1613  rbenv install 2.1.1
+ 1614  rake
+ 1615  ruby
+ 1616  ls
+ 1617  git branch 
+ 1618  ls
+ 1619  git status
+ 1620  git add jni/*
+ 1621  git status
+ 1622  git commit -m "文件路径处理"
+ 1623  git status
+ 1624  git branch 
+ 1625  git checkout dev_release
+ 1626  git status
+ 1627  $NDK/ndk-build
+ 1628  git checkout master 
+ 1629  git status
+ 1630  git add jni/*
+ 1631  git status
+ 1632  gti add src/*
+ 1633  git  add src/*
+ 1634  git status
+ 1635  git commit -m "接口修改"
+ 1636  git status
+ 1637  gitg
+ 1638  git status
+ 1639  gitg
+ 1640  git branch 
+ 1641  git checkout master 
+ 1642  git merge dev_release
+ 1643  git status
+ 1644  git checkout dev_release_dLOG 
+ 1645  git status
+ 1646  git rebase dev_release_dLOG 
+ 1647  git status
+ 1648  gitg
+ 1649  git branch 
+ 1650  git checkout master 
+ 1651  gitg
+ 1652  git checkout dev_release_dLOG 
+ 1653  git rebase master 
+ 1654  gitg
+ 1655  $NDK/ndk-build
+ 1656  git st
+ 1657  git checkout dev_release
+ 1658  gitg
+ 1659  $NDK/ndk-build
+ 1660  git status
+ 1661  gitg
+ 1662  git branch 
+ 1663  gitg
+ 1664  git checkout dev_release_dLOG 
+ 1665  git rebase master 
+ 1666  git status
+ 1667  gitg
+ 1668  git st
+ 1669  git branch 
+ 1670  git checkout outsubtitles_log 
+ 1671  git status
+ 1672  gitg
+ 1673  git rebase master 
+ 1674  git status
+ 1675  git checkout master 
+ 1676  gitg
+ 1677  git co outsubtitles_log 
+ 1678  gitg
+ 1679  git status
+ 1680  gitg
+ 1681  cd /home/ts/source/
+ 1682  ls
+ 1683  g++ test2.cpp 
+ 1684  ./a.out 
+ 1685  g++ test2.cpp 
+ 1686  ./a.out 
+ 1687  cd gitcode/
+ 1688  ls
+ 1689  git st
+ 1690  vi /etc/profile
+ 1691  java
+ 1692  cd /home/ts/git/kankanplayer/
+ 1693  ls
+ 1694  $NDK/ndk-build
+ 1695  git status
+ 1696  git log 
+ 1697  gitg
+ 1698  cd ..
+ 1699  ls
+ 1700  cd ..
+ 1701  ls
+ 1702  cd ll
+ 1703  ll
+ 1704  ls
+ 1705  pwd
+ 1706  cd mediaplayer/MediaPlayer
+ 1707  ls
+ 1708  git status
+ 1709  git branch 
+ 1710  $NDK/ndk-build
+ 1711  gitg
+ 1712  git status
+ 1713  git checkout -b dev_release_dLOG
+ 1714  git status
+ 1715  $NDK/ndk-build
+ 1716  git status
+ 1717  git branch 
+ 1718  git add jni/Application.mk
+ 1719  git commit -m "加日志版本"
+ 1720  git
+ 1721  gitg
+ 1722  git checkout -b outsubtitles_log
+ 1723  git status
+ 1724  gitg
+ 1725  ls
+ 1726  git status
+ 1727  $NDK/NDK-BUILD
+ 1728  $NDK/NDK-build
+ 1729  $NDK/ndk-build
+ 1730  zip ?
+ 1731  zip --help
+ 1732  ls
+ 1733  zip mediaplayer.zip -r . -P 151813
+ 1734  ls
+ 1735  rm -r mediaplayer.zip 
+ 1736  ls
+ 1737  git status
+ 1738  $NDK/ndk-build
+ 1739  git branch 
+ 1740  git status
+ 1741  $NDK/ndk-build
+ 1742  rm -r obj/
+ 1743  $NDK/ndk-build
+ 1744  git branch 
+ 1745  git status
+ 1746  gitg
+ 1747  git add jni/*
+ 1748  git status
+ 1749  git add src/*
+ 1750  git status
+ 1751  git commit -m "外置字幕"
+ 1752  git status
+ 1753  gitg
+ 1754  git status
+ 1755  git branch 
+ 1756  git checkout dev_release
+ 1757  git sattus
+ 1758  git st
+ 1759  gitg
+ 1760  ls
+ 1761  git clone . /home/ts/source/gitcode/
+ 1762  cd /home/ts/source/gitcode/
+ 1763  ls
+ 1764  ll
+ 1765  gitg
+ 1766  ls
+ 1767  git-expor
+ 1768  ls
+ 1769  git gc
+ 1770  git status
+ 1771  ls
+ 1772  cd /media/UDISK/
+ 1773  ls
+ 1774  cd gitcode/
+ 1775  ls
+ 1776  git status
+ 1777  gitg
+ 1778  ls
+ 1779  gitg
+ 1780  cd ..
+ 1781  ls
+ 1782  cd /home/ts/
+ 1783  ls
+ 1784  cd git/
+ 1785  ls
+ 1786  git clone git@gitlab.urd.com:player/mediaplayer.git
+ 1787  gitg
+ 1788  ls
+ 1789  cd mediaplayer/
+ 1790  ls
+ 1791  gitg
+ 1792  vi .gitignore 
+ 1793  gitg
+ 1794  git status
+ 1795  ls
+ 1796  cd jni/
+ 1797  ls
+ 1798  cd prebuilts/
+ 1799  ls
+ 1800  cd ..
+ 1801  ls
+ 1802  cd ..
+ 1803  ls
+ 1804  ll /../..
+ 1805  ll /..
+ 1806  ls
+ 1807  ll ../
+ 1808  ll ../../
+ 1809  ll ../../mediaplayer/
+ 1810  ll ../../mediaplayer/MediaPlayer
+ 1811  ls
+ 1812  cd jni/
+ 1813  ls
+ 1814  pwd
+ 1815  ll
+ 1816  git status
+ 1817  ls
+ 1818  cd prebuilts/
+ 1819  ls
+ 1820  cd arm/
+ 1821  ls
+ 1822  cd ..
+ 1823  ls
+ 1824  cd ..
+ 1825  ls
+ 1826  cd ..
+ 1827  ls
+ 1828  $NDK/ndk-build
+ 1829  ls
+ 1830  cd jni/
+ 1831  ls
+ 1832  cd include/
+ 1833  ls
+ 1834  vi ../../.gitignore 
+ 1835  ls
+ 1836  pwd
+ 1837  ls
+ 1838  cd ..
+ 1839  ls
+ 1840  cd ..
+ 1841  ls
+ 1842  $NDK/ndk-build
+ 1843  ls
+ 1844  gitg
+ 1845  git st
+ 1846  gitg
+ 1847  ls
+ 1848  pwd
+ 1849  cd /home/ts/
+ 1850  ;s
+ 1851  ls
+ 1852  cd FFmpeg/
+ 1853  ls
+ 1854  cd FFMPEG/
+ 1855  ls
+ 1856  ll
+ 1857  vi test.cpp 
+ 1858  /usr/local/ffmpeg/bin/ffplay 
+ 1859  /usr/local/ffmpeg/bin/ffplay -i /media/D/测试视频/huoxianzuji.mp4 
+ 1860  /usr/local/ffmpeg/bin/ffplay -i /media/D/测试视频/\[美丽人生\].上译电影音频版.ac3 
+ 1861  /usr/local/ffmpeg/bin/ffmepg  -i /media/D/测试视频/\[美丽人生\].上译电影音频版.ac3 
+ 1862  /usr/local/ffmpeg/bin/ffmpeg  -i /media/D/测试视频/\[美丽人生\].上译电影音频版.ac3 
+ 1863  /usr/local/ffmpeg/bin/ffmpeg  -i /media/D/测试视频/\[美丽人生\].上译电影音频版.ac3  aa.ac3
+ 1864* /usr/local/ffmpeg/bin/ffplay -i /media/D/
+ 1865  /usr/local/ffmpeg/bin/ffplay -i cht.ass 
+ 1866  /usr/locffmpeg  peg/bin/ffplay -i cht.ass 
+ 1867  /usr/local/ffmpeg/bin/ffmpeg  -i cht.ass 
+ 1868* /usr/local/ffmpeg/bin/ffmpeg  -i 
+ 1869  /usr/local/ffmpeg/bin/ffmpeg  -i /media/D/测试视频/熟女镇.Cougar.Town.S03E03.Chi_Eng.HR-HDTV.AC3.1024X576.x264-YYeTs人人影视.mkv 
+ 1870  ls
+ 1871  make -f testSub.mak 
+ 1872  make -f testAudio.mak 
+ 1873  history
+ 1874  ls
+ 1875  vi log 
+ 1876  gedit log
+ 1877  history > log2

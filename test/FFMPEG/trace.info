@@ -1,0 +1,5 @@
+./resume[0x80485cd]
+./resume[0x804869d]
+./resume[0x80486bc]
+/lib/i386-linux-gnu/libc.so.6(__libc_start_main+0xf3)[0xb755f4d3]
+./resume[0x8048521]

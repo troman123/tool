@@ -2,3 +2,7 @@
 *.txt
 *.log
 *.log*
+*.mp4
+*.h264
+*.out
+/tmp
