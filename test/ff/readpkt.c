@@ -20,6 +20,9 @@ int init(void **ptr)
 {
     context_sys_t* p_ctx = (context_sys_t*)malloc(sizeof(context_sys_t));
     *ptr = p_ctx;
+    p_ctx->pFormatCtx = NULL;
+    p_ctx->pVideoContext = NULL;
+    p_ctx->pAudioContext = NULL;
 
     av_register_all();
     avcodec_register_all();
@@ -27,7 +30,7 @@ int init(void **ptr)
     av_log_set_level(AV_LOG_DEBUG);
 
     AVFormatContext *pFormatctx = avformat_alloc_context();
-    if (avformat_open_input(&pFormatctx, "../../../test/youkuYY.mp4", NULL, NULL) != 0)
+    if (avformat_open_input(&pFormatctx, "/mnt/hgfs/D/test/youkuYY.mp4", NULL, NULL) != 0)
     {
         return -1;
     }
@@ -58,28 +61,34 @@ int init(void **ptr)
     }
 
     AVCodec *pCodec = NULL;
-    pCodec = avcodec_find_decoder(p_ctx->pVideoContext->codec_id);
-    if (pCodec == NULL)
+    int ret = -1;
+    if (p_ctx->pVideoContext != NULL)
     {
-        fprintf(stdout, "Unsupported video codec.");
+        pCodec = avcodec_find_decoder(p_ctx->pVideoContext->codec_id);
+        if (pCodec == NULL)
+        {
+            fprintf(stdout, "Unsupported video codec.");
+        }
+        ret = avcodec_open2(p_ctx->pVideoContext, pCodec, 0);
+        if (ret != 0)
+        {
+            fprintf(stderr, "can not open video codec.");
+        }
     }
 
-    int ret = avcodec_open2(p_ctx->pVideoContext, pCodec, 0);
-    if (ret != 0)
+    if (p_ctx->pAudioContext != NULL)
     {
-        fprintf(stderr, "can not open video codec.");
-    }
+        pCodec = avcodec_find_decoder(p_ctx->pAudioContext->codec_id);
+        if (pCodec == NULL)
+        {
+            fprintf(stderr, "Unsupported audio codec.");
+        }
 
-    pCodec = avcodec_find_decoder(p_ctx->pAudioContext->codec_id);
-    if (pCodec == NULL)
-    {
-        fprintf(stderr, "Unsupported audio codec.");
-    }
-
-    ret = avcodec_open2(p_ctx->pAudioContext, pCodec, 0);
-    if (ret != 0)
-    {
-        fprintf(stderr, "can not open audio codec.\n");
+        ret = avcodec_open2(p_ctx->pAudioContext, pCodec, 0);
+        if (ret != 0)
+        {
+            fprintf(stderr, "can not open audio codec.\n");
+        }
     }
 
     p_ctx->fp = fopen("io.log", "a+");

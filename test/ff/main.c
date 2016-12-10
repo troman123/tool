@@ -2,16 +2,24 @@
 
 int main(int argc, char const *argv[])
 {
-    void *ptr = NULL;
-    int ret = init(&ptr);
-    if (ret == 0)
+    if (0)
     {
-        readPkt(ptr);
+        void *ptr = NULL;
+        int ret = init(&ptr);
+        if (ret == 0)
+        {
+            readPkt(ptr);
+        }
+        else
+        {
+            fprintf(stdout, "init ret failed. ret=%d\n", ret);
+        }
     }
     else
     {
-        fprintf(stdout, "init ret failed. ret=%d\n", ret);
+        outoutmedia(1, NULL);
     }
+    
 
     return 0;
 }
