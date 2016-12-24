@@ -1,6 +1,6 @@
 OUTPUT = main.run2
 OBJS =
-OBJS += main.o readpkt.o muxing.o
+OBJS += main.o readpkt.o muxing.o audiodecoder.o
 #LDFLAGS = -L
 CFLAGS = -g 
 LIBS = -g `pkg-config --libs x264` `pkg-config --libs libavformat` `pkg-config --libs libavcodec` `pkg-config --libs libswscale`

@@ -1,25 +1,37 @@
 #include <stdio.h>
 
+static int case_type = 2;
 int main(int argc, char const *argv[])
 {
-    if (0)
+    fprintf(stdout, "main run case_type=%d\n", case_type);
+
+    switch(case_type)
     {
-        void *ptr = NULL;
-        int ret = init(&ptr);
-        if (ret == 0)
+        case 0:
         {
-            readPkt(ptr);
+            void *ptr = NULL;
+            int ret = init(&ptr);
+            if (ret == 0)
+            {
+                readPkt(ptr);
+            }
+            else
+            {
+                fprintf(stdout, "init ret failed. ret=%d\n", ret);
+            }
+            break;
         }
-        else
+        case 1:
         {
-            fprintf(stdout, "init ret failed. ret=%d\n", ret);
+            outoutmedia(1, NULL);
+            break;
+        }
+        case 2:
+        {
+            audiodecodedemo(1, NULL);
+            break;
         }
     }
-    else
-    {
-        outoutmedia(1, NULL);
-    }
-    
 
     return 0;
 }
