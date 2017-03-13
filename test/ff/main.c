@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-static int case_type = 2;
+static int case_type = 1;
 int main(int argc, char const *argv[])
 {
     fprintf(stdout, "main run case_type=%d\n", case_type);

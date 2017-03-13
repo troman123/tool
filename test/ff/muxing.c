@@ -455,16 +455,36 @@ static void fill_yuv_image(AVFrame *pict, int frame_index,
     /* Y */
     for (y = 0; y < height; y++)
         for (x = 0; x < width; x++)
-            pict->data[0][y * pict->linesize[0] + x] = x + y + i * 3;
+            pict->data[0][y * pict->linesize[0] + x] = 0;
 
     /* Cb and Cr */
     for (y = 0; y < height / 2; y++) {
         for (x = 0; x < width / 2; x++) {
-            pict->data[1][y * pict->linesize[1] + x] = 128 + y + i * 2;
-            pict->data[2][y * pict->linesize[2] + x] = 64 + x + i * 5;
+            pict->data[1][y * pict->linesize[1] + x] = 128;
+            pict->data[2][y * pict->linesize[2] + x] = 128;
         }
     }
 }
+
+// static void fill_yuv_image(AVFrame *pict, int frame_index, int width, int height)
+// {
+//     int i;
+
+//      for (i = 0; i < pict->linesize[0] * pict->height; ++i)
+//     {
+//         pict->data[0][i] = 0;
+//     }
+
+//     for (i = 0; i < pict->linesize[1] * pict->height / (2); ++i)
+//     {
+//         pict->data[1][i] = 128;
+//     }
+
+//     for (i = 0; i < pict->linesize[2] * pict->height / (2); ++i)
+//     {
+//         pict->data[2][i] = 128;
+//     }
+// }
 
 static AVFrame *get_video_frame(OutputStream *ost)
 {
